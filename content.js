@@ -1,2 +1,6 @@
-const text = () => "It works from content.js."
-export default text
+import React from 'react'
+
+const NewComponent = () =>
+	<div>Helo World</div>
+
+export default NewComponent
