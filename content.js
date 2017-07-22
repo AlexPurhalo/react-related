@@ -1,6 +1,22 @@
 import React from 'react'
 
-const NewComponent = () =>
-	<div>Helo World</div>
+class ChildComponent extends React.Component {
+	constructor(props) {
+		super(props)
+		
+		this.state = { message: props.message }
+	}
+	
+	componentWillReceiveProps(nextProps) {
+		this.setState({ message: nextProps.message })
+	}
+	
+	
+	render() {
+		return (
+			<div>{this.state.message}</div>
+		)
+	}
+}
 
-export default NewComponent
+export default ChildComponent

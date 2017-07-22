@@ -2,41 +2,25 @@ import './style.css'
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-class Clock extends React.Component {
+import ChildComponent from './content'
+
+class App extends React.Component {
 	constructor(props) {
-		super(props);
-		this.state = {date: new Date()};
+		super(props)
+		
+		this.state = { message: 'Stars comes closer when you will come to place' }
 	}
-	
-	componentDidMount() {
-		this.timerID = setInterval(
-			() => this.tick(),
-			1000
-		);
-	}
-	
-	componentWillUnmount() {
-		clearInterval(this.timerID);
-	}
-	
-	tick() {
-		this.setState({
-			date: new Date()
-		});
-	}
-	
 	render() {
+		console.log(this.state.message)
 		return (
 			<div>
-				<h1>Hello, world!</h1>
-				<h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+				<button onClick={() => this.setState({ message: "Booom!" })}>Destroy message</button>
+				<ChildComponent message={this.state.message} />
 			</div>
-		);
+		)
 	}
 }
-
-
 ReactDOM.render(
-	<Clock />,
+	<App />,
 	document.getElementById('root')
 );
