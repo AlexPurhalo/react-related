@@ -1,3 +1,7 @@
-import "./style.css";
-import text from './content'
-document.write(text());
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+ReactDOM.render(
+	<h1>Hello, world!</h1>,
+	document.getElementById('root')
+);

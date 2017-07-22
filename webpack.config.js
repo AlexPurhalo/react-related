@@ -10,7 +10,11 @@ module: {
 		    test: /\.js$/,
 		    loader: 'babel-loader',
 		    query: {
-			    presets: ['es2015']
+			    presets: [
+			    	'es2015',
+				    'babel-preset-react',
+				    'babel-preset-es2015'
+			    ]
 		    }
 	    },
       {
