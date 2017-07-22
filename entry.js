@@ -1,2 +1,3 @@
-require("./style.css");
-document.write(require("./content.js"));
+import "./style.css";
+import text from './content'
+document.write(text());
