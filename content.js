@@ -7,8 +7,21 @@ class ChildComponent extends React.Component {
 		
 		this.state = {
 			message: props.message,
-			posts: []
+			posts: [],
+			count: 1
 		}
+	}
+	
+	shouldComponentUpdate(nextProps, nextState) {
+		if (this.props.message !== nextProps.message) {
+			return true;
+		}
+		
+		if (this.state.count !== nextState.count) {
+			return true
+		}
+		
+		return false
 	}
 	
 	componentWillReceiveProps(nextProps) {
@@ -22,7 +35,17 @@ class ChildComponent extends React.Component {
 	
 	render() {
 		return (
-			<div>{this.state.message}</div>
+			<div>
+				<button
+					onClick={() => this.setState(state => ({count: state.count + 1}))}
+				>
+					More!!!
+				</button>
+				<h5>Counter: {this.state.count}</h5>
+				<h4>
+					{this.state.message}
+				</h4>
+			</div>
 		)
 	}
 }
