@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 
-class ChildComponent extends React.Component {
+class ChildComponent extends React.PureComponent {
 	constructor(props) {
 		super(props)
 		
@@ -10,18 +10,6 @@ class ChildComponent extends React.Component {
 			posts: [],
 			count: 1
 		}
-	}
-	
-	shouldComponentUpdate(nextProps, nextState) {
-		if (this.props.message !== nextProps.message) {
-			return true;
-		}
-		
-		if (this.state.count !== nextState.count) {
-			return true
-		}
-		
-		return false
 	}
 	
 	componentWillReceiveProps(nextProps) {
