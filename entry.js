@@ -1,31 +1,44 @@
 import './style.css'
-import React, { Component } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import Counter from './content'
+import $ from 'jquery'
 
-class App extends Component {
-	//MOUNTING
+class Hello extends React.Component {
 	state = {
-		counter: 0
+		show: true
 	}
 	
-	incrementCounter = () => {
-		this.setState({
-			counter: ++this.state.counter
-		});
-	};
+	componentWillUpdate(nextProps, nextState){
+		$(ReactDOM.findDOMNode(this.refs.elem)).css({
+			'opacity': nextState.show ? 0 : 1
+		})
+	}
+	
+	toggleHandler = () => this.setState({ show: !this.state.show })
+	
+	componentDidUpdate(preProps, prevState) {
+		$(ReactDOM.findDOMNode(this.refs.elem)).css({
+			'opacity': this.state.show ? '1' : '0'
+		})
+	}
 	
 	render() {
+		const className = this.state.show? "myelem show" : "myelem "
+		
 		return (
-			<div>
-				<Counter counter={this.state.counter} />
-				<button onClick={this.incrementCounter}>Click1</button>
+			<div ref="mydom">
+				<button  onClick={this.toggleHandler}>
+					Click me
+				</button>
+				<div className={className} ref="elem">
+					SHOW
+				</div>
 			</div>
-		);
+		)
 	}
 }
 
 ReactDOM.render(
-	<App />,
+	<Hello name="World" />,
 	document.getElementById('root')
 )

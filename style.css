@@ -1,3 +1,21 @@
 body {
     background: yellow;
 }
+
+.myelem{
+    position : fixed;
+    transition : all 1s ease 0s;
+    top:100px;
+    left:0;
+    width:100px;
+    height:100px;
+    background:red;
+    color:white;
+    padding:10px;
+    box-sizing:border-box;
+    border : 1px solid black;
+}
+.myelem.show{
+    left: 50%;
+
+}
