@@ -1,26 +1,31 @@
 import './style.css'
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import Counter from './content'
 
-import ChildComponent from './content'
-
-class App extends React.Component {
-	constructor(props) {
-		super(props)
-		
-		this.state = { message: 'Stars comes closer when you will come to place' }
+class App extends Component {
+	//MOUNTING
+	state = {
+		counter: 0
 	}
+	
+	incrementCounter = () => {
+		this.setState({
+			counter: ++this.state.counter
+		});
+	};
+	
 	render() {
-		console.log(this.state.message)
 		return (
 			<div>
-				<button onClick={() => this.setState({ message: "Booom!" })}>Destroy message</button>
-				<ChildComponent message={this.state.message} />
+				<Counter counter={this.state.counter} />
+				<button onClick={this.incrementCounter}>Click1</button>
 			</div>
-		)
+		);
 	}
 }
+
 ReactDOM.render(
 	<App />,
 	document.getElementById('root')
-);
+)

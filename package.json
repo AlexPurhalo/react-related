@@ -5,8 +5,6 @@
   "main": "bundle.js",
   "dependencies": {
     "axios": "^0.16.2",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
     "css-loader": "^0.28.4",
     "loglevel": "^1.4.1",
     "react": "^15.6.1",
@@ -14,14 +12,7 @@
     "style-loader": "^0.18.2"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "babel": {
-    "presets": [
-      "es2015",
-      "babel-preset-react",
-      "babel-preset-es2015"
-    ]
+    "dev": "webpack-dev-server --watch"
   },
   "keywords": [],
   "author": "",
@@ -29,6 +20,12 @@
   "devDependencies": {
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-preset-stage-1": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "babel-preset-stage-3": "^6.24.1",
     "webpack": "^3.3.0",
     "webpack-dev-server": "^2.6.0"
   }
