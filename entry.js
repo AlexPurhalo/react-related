@@ -1,44 +1,63 @@
 import './style.css'
 import React from 'react';
 import ReactDOM from 'react-dom';
-import $ from 'jquery'
 
-class Hello extends React.Component {
-	state = {
-		show: true
+class App extends React.Component {
+	constructor(){
+		super();
+		this.state = {val: 0}
+		this.update = this.update.bind(this)
 	}
-	
-	componentWillUpdate(nextProps, nextState){
-		$(ReactDOM.findDOMNode(this.refs.elem)).css({
-			'opacity': nextState.show ? 0 : 1
+	update( ){
+		this.setState({
+			val: this.state.val + 1
 		})
 	}
 	
-	toggleHandler = () => this.setState({ show: !this.state.show })
-	
-	componentDidUpdate(preProps, prevState) {
-		$(ReactDOM.findDOMNode(this.refs.elem)).css({
-			'opacity': this.state.show ? '1' : '0'
-		})
-	}
-	
-	render() {
-		const className = this.state.show? "myelem show" : "myelem "
+	componentWillMount(){
+		console.log('componentWillMount')
+		this.setState({m: 2})
 		
+	}
+	componentDidMount(){
+		console.log('componentDidMount')
+		this.inc = setInterval(this.update, 500)
+	}
+	
+	componentWillUnmount(){
+		console.log('componentWillUnmount')
+		clearInterval(this.inc)
+	}
+	
+	render(){
+		console.log('render');
+		return <button onClick={this.update}>
+			{this.state.val * this.state.m}
+		</button>
+	}
+	
+	
+}
+
+class Wrapper extends React.Component {
+	mount(){
+		ReactDOM.render(<App/>, document.getElementById('a'))
+	}
+	unmount(){
+		ReactDOM.unmountComponentAtNode(document.getElementById('a'))
+	}
+	render(){
 		return (
-			<div ref="mydom">
-				<button  onClick={this.toggleHandler}>
-					Click me
-				</button>
-				<div className={className} ref="elem">
-					SHOW
-				</div>
+			<div>
+				<button onClick={this.mount.bind(this)}>Mount</button>
+				<button onClick={this.unmount.bind(this)}>Unmount</button>
+				<div id='a'></div>
 			</div>
 		)
 	}
 }
 
 ReactDOM.render(
-	<Hello name="World" />,
+	<Wrapper />,
 	document.getElementById('root')
 )
