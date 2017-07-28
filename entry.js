@@ -2,62 +2,58 @@ import './style.css'
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-class App extends React.Component {
-	constructor(){
-		super();
-		this.state = {val: 0}
-		this.update = this.update.bind(this)
+const JSON = {
+	shop: {
+		id: 1,
+		name: 'Super shop',
+		categories: [
+			{
+				id: 2,
+				name: 'man',
+				categories: [
+					{ id: 3, name: 'shorts', categories: [ { id: 7, name: 'green', categories: [
+						{id: 11, name: 'go'}
+					] } ] },
+					{ id: 6, name: 'boots' }
+				]
+			},
+			{
+				id: 4,
+				name: 'woman',
+				categories: [
+					{ id: 5, name: 'woman-boots' }
+				]
+			}
+		]
 	}
-	update( ){
-		this.setState({
-			val: this.state.val + 1
-		})
-	}
-	
-	componentWillMount(){
-		console.log('componentWillMount')
-		this.setState({m: 2})
-		
-	}
-	componentDidMount(){
-		console.log('componentDidMount')
-		this.inc = setInterval(this.update, 500)
-	}
-	
-	componentWillUnmount(){
-		console.log('componentWillUnmount')
-		clearInterval(this.inc)
-	}
-	
-	render(){
-		console.log('render');
-		return <button onClick={this.update}>
-			{this.state.val * this.state.m}
-		</button>
-	}
-	
-	
 }
 
-class Wrapper extends React.Component {
-	mount(){
-		ReactDOM.render(<App/>, document.getElementById('a'))
-	}
-	unmount(){
-		ReactDOM.unmountComponentAtNode(document.getElementById('a'))
-	}
-	render(){
+const Category = ({category}) => (
+	<li>
+		<h2>{category.name}</h2>
+		{category.categories && category.categories.map(nestedCategory =>
+			<ul key={nestedCategory.id}>
+				<Category category={nestedCategory} key={nestedCategory.id} />
+			</ul>
+		)}
+	</li>
+)
+
+class App extends React.Component {
+	render() {
 		return (
-			<div>
-				<button onClick={this.mount.bind(this)}>Mount</button>
-				<button onClick={this.unmount.bind(this)}>Unmount</button>
-				<div id='a'></div>
-			</div>
-		)
+			<ul>
+				{JSON.shop.categories.map(category =>
+					<Category category={category} key={category.id} />
+				)}
+			</ul>
+		
+		);
 	}
 }
 
 ReactDOM.render(
-	<Wrapper />,
+	<App />,
 	document.getElementById('root')
 )
+
