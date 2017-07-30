@@ -1,73 +1,124 @@
-const categories = [
+// Hi, you are gnome that catches diamonds, you how tunnel with different levels
+// where locates what are you looking for
+// Your issue is build the system that will check does diamond exist by certain level
+
+const allTunnels = [
 	{
-		id: 2,
-		name: 'man',
-		categories: [
+		id: 1,
+		diamond: false,
+		lvl: 0,
+		tunnels: [
 			{
-				id: 3,
-				name: 'shorts',
-				parent_id: 2,
-				categories: [
-					{ id: 7, name: 'green', parent_id: 3 },
-					{ id: 14, name: 'find', parent_id: 3 },
-					{ id: 144, name: 'findgo', parent_id: 3 },
-					{ id: 125, name: 'walad', parent_id: 3 }
+				id: 2,
+				diamond: true,
+				lvl: 1,
+				tunnels: [
+					{
+						id: 3,
+						diamond: false,
+						lvl: 2,
+						tunnels: [
+							{
+								id: 4,
+								diamond: false,
+								lvl: 3,
+								tunnels: [
+									{ id: 5, diamond: false, lvl: 4 },
+									{ id: 6, diamond: true, lvl: 4 },
+									{ id: 7, diamond: false, lvl: 4 }
+								]
+							},
+							{
+								id: 8, diamond: false, lvl: 3
+							},
+							{
+								id: 9,
+								diamond: false,
+								lvl: 3,
+								tunnels: [
+									{ id: 10, diamond: false, lvl: 4 }
+								]
+							}
+						]
+					},
+					{
+						id: 11, diamond: false, lvl: 2
+					}
 				]
 			},
 			{
-				id: 6,
-				name: 'boots',
-				categories: [
-					{ id: 97, name: 'blue', parent_id: 6 },
-					{ id: 101, name: 'wow', parent_id: 6 }
+				id: 12,
+				diamond: true,
+				lvl: 1,
+				tunnels: [
+					{
+						id: 13, diamond: false, lvl: 2
+					}
 				]
 			},
-			{ id: 666, name: 'works', parent_id: 2 }
+			{
+				id: 14,
+				diamond: false
+				, lvl: 1
+			}
 		]
 	},
 	{
-		id: 4,
-		name: 'woman',
-		categories: [
-			{ id: 5, name: 'woman-boots', parent_id: 4 }
-		]
+		id: 15,
+		diamond: false,
+		lvl: 0
 	}
 ]
 
-const findById = (allTags, id) => {
-	const find = (tag, i, elId) => {
-		const subTag = tag['categories'][i]
+
+const catchDiamonds = (allTunnels, id) => {
+	
+	const findDiamond = (tunnel, lvls, elId, row) => {
+		// condition to up row or not
+		console.log(tunnel.tunnels[lvls[row]])
+		console.log(`id: ${tunnel['id']}, row: ${row}, [${lvls}]`)
 		
-		if (subTag['id'] === elId) return subTag
-		if (subTag['categories']) return find(subTag, i, id)
+		const subTunnel = tunnel['tunnels'][lvls[row]]
 		
-		if (i < tag['categories'].length-1) return find(tag, i+1, id)
+		if (subTunnel) {
+			if (subTunnel['id'] === id) {
+				if (!lvls[lvls.length-1]) { lvls[lvls.length] = 0 }
+				return subTunnel
+			}
+			
+			const isSubTunnelHasTunnels = subTunnel['tunnels']
+			
+			if (isSubTunnelHasTunnels) {
+				if (!lvls[lvls.length-1]) { lvls[lvls.length] = 0 }
+				
+				return findDiamond(subTunnel, lvls, id, row+1)
+			}
+			
+			const lastSubTunnelIndex = tunnel['tunnels'].length-1
+			
+			if (lvls[row] === lastSubTunnelIndex) {
+				lvls = lvls.slice(0, lvls.indexOf(lvls[row]))
+				lvls[lvls.length-1] = lvls[lvls.length-1]+1
+				
+				console.log('----------------------')
+				
+				return findDiamond(tunnelsObj, lvls, id, 0)
+			}
+			
+			console.log('change condition here')
+			console.log(`id: ${tunnel.id}, row: ${row}`)
+			lvls[row] = lvls[row] + 1 // change condition here
+			
+			return findDiamond(tunnel, lvls, id, row)
+		}
 		
-		const parObj = find(initObj, 0, tag['parent_id'])
-		return find(parObj, 1, id)
 	}
 	
-	const initObj  = { categories: allTags }
-	return find(initObj, 0, id)
+	const tunnelsObj = { tunnels: allTunnels }
+	
+	return findDiamond(tunnelsObj, [0], id, 0)
 }
 
-// 5. Checks has iteration has been finished at empty object and returns -1 // if obj > {} i = max
-
-// 4. Checks is next element in categories array exist. If not returns to parent object's array
-//    And looks to the other objects, that still wasn't checked following to iteration number
-console.log(findById(categories, 6))
-
-// 3. If first subcategory is not what we looking for goes to the next object in array
-// console.log(findById(categories, 125))
-
-// 2. If provided id is not equal to first object's id but equal to it's subCategory id
-//    that located first in array with categories
-// console.log(findById(categories, 7))
-
-// 1. If provided id is equal to first object's id => obj
-// console.log(findById(categories, 2))
-
-// 2. If it's not exist looks deeper to objects nesting --- OK!
-// 3. If nothing was found backs up to last parent of nested object and checks it's object nesting
-// 4. If nothing was found returns to previous step
-// 5. If nothing was found during returning to parent object - finishes with "-1"
+// catchDiamonds(allTunnels, 6)
+console.log(catchDiamonds(allTunnels, 10))
+// console.log(catchDiamonds(allTunnels, 1))
