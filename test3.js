@@ -63,12 +63,17 @@ const allTunnels = [
 	{
 		id: 15,
 		diamond: false,
-		parent_id: 0
+		parent_id: 0,
+		tunnels: [
+			{ id: 16, diamond: false, parent_id: 15 }
+		]
 	}
 ]
 
 const findTunnelById = (initialTunnels, id) => {
+	// Data
 	const parentTunnels = []
+	
 	// Actions
 	const goDown = (p) => {
 		p[p.length] = 0
@@ -83,27 +88,46 @@ const findTunnelById = (initialTunnels, id) => {
 	}
 	
 	// Conditions
-	const isExactTunnel = (tunnel, currId) => tunnel['id'] === currId
-	const hasTunnels    = (tunnel) => tunnel['tunnels']
-	const isTunnelExist = (parTunnel, position) => parTunnel['tunnels'][position[position.length-1]]
+	const isExactTunnel     = (tunnel, currId) => tunnel['id'] === currId
+	const hasTunnels        = (tunnel) => tunnel['tunnels']
+	const isTunnelExist     = (parTunnel, position) => parTunnel['tunnels'][position[position.length-1]]
+	const areInitialTunnels = (position) => position.length <= 3
 	
+	const isOverSearch      = (position) => {
+		const maxLength = initialTunnels.length
+		const currPosition = position[position.length-1]
+		
+		return currPosition >= maxLength
+	}
+	
+	// Function
 	const findTunnel = (tunnels, currId, position) => {
-		console.log('initial lastParent:')
-		console.log(parentTunnels[0])
-		console.log('')
-		console.log('')
 		const currTunnel = tunnels[position[position.length-1]]
 		
 		if (isExactTunnel(currTunnel, currId)) return currTunnel
 		
-		goDown(position)
+		position = goDown(position)
 		
 		if (hasTunnels(currTunnel) && isTunnelExist(currTunnel, position)) {
 			parentTunnels.unshift(currTunnel)
 			return findTunnel(currTunnel['tunnels'], currId, position)
 		}
 		
-		
+		if (areInitialTunnels(position)) {
+			position = goBack(position)
+			position = goBack(position)
+			position = goToNext(position)
+			
+			if (isOverSearch(position)) return -1
+			
+			const nextTunnel = initialTunnels[position[position.length-1]]
+			
+			if (isExactTunnel(nextTunnel, currId)) return nextTunnel
+			
+			position = goDown(position)
+			
+			return findTunnel(nextTunnel['tunnels'], currId, position)
+		}
 		
 		const findNextTunnel = (p) => {
 			const parentTunnel = parentTunnels[0]
@@ -125,4 +149,5 @@ const findTunnelById = (initialTunnels, id) => {
 	return findTunnel(initialTunnels, id, [0])
 }
 
-console.log(findTunnelById(allTunnels, 15))
+console.log(findTunnelById(allTunnels, 16))
+console.log(findTunnelById(allTunnels, 18))
