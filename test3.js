@@ -68,6 +68,7 @@ const allTunnels = [
 ]
 
 const findTunnelById = (initialTunnels, id) => {
+	const parentTunnels = []
 	// Actions
 	const goDown = (p) => {
 		p[p.length] = 0
@@ -87,18 +88,25 @@ const findTunnelById = (initialTunnels, id) => {
 	const isTunnelExist = (parTunnel, position) => parTunnel['tunnels'][position[position.length-1]]
 	
 	const findTunnel = (tunnels, currId, position) => {
+		console.log('initial lastParent:')
+		console.log(parentTunnels[0])
+		console.log('')
+		console.log('')
 		const currTunnel = tunnels[position[position.length-1]]
 		
 		if (isExactTunnel(currTunnel, currId)) return currTunnel
 		
 		goDown(position)
 		
-		if (hasTunnels(currTunnel) && isTunnelExist(currTunnel, position))
+		if (hasTunnels(currTunnel) && isTunnelExist(currTunnel, position)) {
+			parentTunnels.unshift(currTunnel)
 			return findTunnel(currTunnel['tunnels'], currId, position)
+		}
 		
 		
-		const findNextTunnel = (tunnel, p) => {
-			const parentTunnel = findTunnel(initialTunnels, tunnel['parent_id'], [0])
+		
+		const findNextTunnel = (p) => {
+			const parentTunnel = parentTunnels[0]
 			
 			p = goBack(p)
 			p = goToNext(p)
@@ -106,13 +114,15 @@ const findTunnelById = (initialTunnels, id) => {
 			if (isTunnelExist(parentTunnel, p))
 				return findTunnel(parentTunnel['tunnels'], currId, p)
 			
-			return findNextTunnel(parentTunnel, p)
+			parentTunnels.shift()
+			
+			return findNextTunnel(p)
 		}
 		
-		return findNextTunnel(currTunnel, position)
+		return findNextTunnel(position)
 	}
 	
 	return findTunnel(initialTunnels, id, [0])
 }
 
-console.log(findTunnelById(allTunnels, 14))
+console.log(findTunnelById(allTunnels, 15))
