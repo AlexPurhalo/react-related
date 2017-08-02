@@ -63,13 +63,93 @@ const allTunnels = [
 	{
 		id: 15,
 		diamond: false,
-		parent_id: 0
+		parent_id: 0,
+		tunnels: [
+			{
+				id: 16,
+				diamond: false,
+				parent_id: 15
+			},
+			{
+				id: 17,
+				diamond: false,
+				parent_id: 15
+			},
+			{
+				id: 18,
+				diamond: false,
+				parent_id: 15
+			},
+			{
+				id: 19,
+				diamond: false,
+				parent_id: 15
+			},
+			{
+				id: 20,
+				diamond: false,
+				parent_id: 15
+			},
+			{
+				id: 21,
+				diamond: false,
+				parent_id: 15
+			},
+			{
+				id: 22,
+				diamond: false,
+				parent_id: 15
+			},
+			{
+				id: 23,
+				diamond: false,
+				parent_id: 15
+			},
+			{
+				id: 24,
+				diamond: false,
+				parent_id: 15,
+				diamonds: [
+					{
+						id: 25,
+						diamond: false,
+						parent_id: 24,
+						diamonds: [
+							{
+								id: 26,
+								diamond: false,
+								parent_id: 25,
+								diamonds: [
+									{
+										id: 27,
+										diamond: false,
+										parent_id: 26,
+										diamonds: [
+											{
+												id: 28,
+												diamond: false,
+												parent_id: 27
+											},
+											{
+												id: 29,
+												diamond: false,
+												parent_id: 27
+											}
+										]
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		]
 	}
 ]
 
-
 // Realization
 const findTunnelById = (initTunnel, id) => {
+	const parentTunnels = []
 	// Actions
 	const goDown = (p) => {
 		p[p.length] = 0
@@ -94,12 +174,17 @@ const findTunnelById = (initTunnel, id) => {
 		
 		position = goDown(position)
 		
-		if (hasTunnels(currTunnel) && isTunnelExist(currTunnel, position))
+		if (hasTunnels(currTunnel) && isTunnelExist(currTunnel, position)) {
+			parentTunnels.unshift(currTunnel['tunnels'][position[position.length-1]])
+			
 			return findTunnel(
 				currTunnel['tunnels'][position[position.length-1]],
 				currId,
 				position
 			)
+		}
+		
+		parentTunnels.shift()
 		
 		const findParentsNextTunnel = (tunnel, p) => {
 			const parentTunnel = findTunnel(initTunnel, tunnel['parent_id'], [0])
@@ -113,23 +198,14 @@ const findTunnelById = (initTunnel, id) => {
 			return findParentsNextTunnel(parentTunnel, p)
 		}
 		
+		parentTunnels.shift()
+		
 		return findParentsNextTunnel(currTunnel, position)
 	}
 	
 	return findTunnel(initTunnel, id, [0])
+	
 }
 
 // Find tunnel bellow
-console.log(findTunnelById({ id: 0, tunnels: allTunnels}, 0))
-console.log(findTunnelById({ id: 0, tunnels: allTunnels}, 1))
-console.log(findTunnelById({ id: 0, tunnels: allTunnels}, 3))
-console.log(findTunnelById({ id: 0, tunnels: allTunnels}, 5))
-console.log(findTunnelById({ id: 0, tunnels: allTunnels}, 10))
-console.log(findTunnelById({ id: 0, tunnels: allTunnels}, 13))
-
-// Find tunnel behind
-console.log(findTunnelById({ id: 0, tunnels: allTunnels}, 7))
-console.log(findTunnelById({ id: 0, tunnels: allTunnels}, 15))
-console.log(findTunnelById({ id: 0, tunnels: allTunnels}, 11))
-console.log(findTunnelById({ id: 0, tunnels: allTunnels}, 12))
 console.log(findTunnelById({ id: 0, tunnels: allTunnels}, 15))
